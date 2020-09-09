@@ -8,6 +8,25 @@ class Result {
   average: number;
 }
 
+const parseList = (args: Array<string>) => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+  let arg1 = args.slice(3, args.length);
+  let arr: number[] = [];
+  for (let i = 0; i < arg1.length; i++) {
+    arr.push(Number(arg1[i]));
+  }
+
+  if (!isNaN(Number(args[2])) && arr.every((i) => !isNaN(i))) {
+    return {
+      value1: arr,
+      value2: Number(args[2]),
+    };
+  } else {
+    throw new Error('Provided values were not numbers!');
+  }
+};
+
+
 const calculateExercises = (
   training: Array<number>,
   target: number
@@ -46,4 +65,9 @@ const calculateExercises = (
   return summary;
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1, 10], 2));
+try {
+  const { value1, value2 } = parseList(process.argv);
+  console.log(calculateExercises(value1, value2));
+} catch (error) {
+  console.log('Error, something bad happend, message: ', error.message);
+}
