@@ -1,17 +1,17 @@
 class Result {
-  periodLength: number;
-  trainingDays: number = 0;
-  success: boolean;
-  rating: number;
-  ratingDescription: string;
-  target: number;
-  average: number;
+  periodLength = 0;
+  trainingDays = 0;
+  success = false;
+  rating = 0;
+  ratingDescription = '';
+  target = 0;
+  average = 0;
 }
 
 const parseList = (args: Array<string>) => {
   if (args.length < 4) throw new Error('Not enough arguments');
-  let arg1 = args.slice(3, args.length);
-  let arr: number[] = [];
+  const arg1 = args.slice(3, args.length);
+  const arr: number[] = [];
   for (let i = 0; i < arg1.length; i++) {
     arr.push(Number(arg1[i]));
   }
@@ -26,12 +26,11 @@ const parseList = (args: Array<string>) => {
   }
 };
 
-
-const calculateExercises = (
+export const calculateExercises = (
   training: Array<number>,
   target: number
 ): Result => {
-  let summary = new Result();
+  const summary = new Result();
   summary.periodLength = training.length;
   for (let i = 0; i < training.length; i++) {
     if (training[i] !== 0) {
@@ -39,7 +38,7 @@ const calculateExercises = (
     }
   }
   summary.average = training.reduce((p, c) => p + c, 0) / training.length;
-  if (summary.average === target) {
+  if (summary.average >= target) {
     summary.success = true;
   } else {
     summary.success = false;
@@ -48,7 +47,7 @@ const calculateExercises = (
 
   if (summary.average >= target) {
     summary.rating = 3;
-  } else if (summary.rating < target / 2.5) {
+  } else if (summary.average < target / 2.5) {
     summary.rating = 1;
   } else {
     summary.rating = 2;
@@ -69,5 +68,7 @@ try {
   const { value1, value2 } = parseList(process.argv);
   console.log(calculateExercises(value1, value2));
 } catch (error) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   console.log('Error, something bad happend, message: ', error.message);
 }
+

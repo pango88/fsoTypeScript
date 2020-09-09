@@ -17,7 +17,7 @@ const parseArguments = (args: Array<string>): BmiValues => {
   }
 };
 
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
   const meters: number = height / 100;
   const bmi: number = weight / (meters * meters);
 
@@ -34,5 +34,8 @@ try {
   const { length, weight } = parseArguments(process.argv);
   console.log(calculateBmi(length, weight));
 } catch (error) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   console.log('Error, something bad happened, message: ', error.message);
 }
+
+export default calculateBmi;
