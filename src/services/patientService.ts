@@ -1,6 +1,7 @@
-import patientData from '../../data/patients.json';
+import patientData from '../../data/patients';
+import { generateId } from '../utils';
 
-import { PatientNoSsn, Patient } from '../types';
+import { PatientNoSsn, Patient, NewPatient } from '../types';
 
 const patients: Array<Patient> = patientData;
 
@@ -13,4 +14,14 @@ const getPatients = (): PatientNoSsn[] =>
     occupation,
   }));
 
-export default { getPatients };
+const addPatient = (patient: NewPatient): PatientNoSsn => {
+  const newPatient = {
+    id: generateId(),
+    ...patient,
+  };
+
+  patients.push(newPatient);
+  return newPatient;
+};
+
+export default { getPatients, addPatient };
