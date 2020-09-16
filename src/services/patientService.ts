@@ -22,6 +22,8 @@ const getPatientById = (id: string): (Patient | null)[] => {
 const addPatient = (patient: NewPatient): PatientNoSsn => {
   const newPatient = {
     id: generateId(),
+    // temporary fix
+    entries: [],
     ...patient,
   };
 

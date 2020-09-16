@@ -9,7 +9,7 @@ router.get('/', (_req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  console.log(req.params.id);
+  // error handling?
   res.send(paitentService.getPatientById(req.params.id));
 });
 
