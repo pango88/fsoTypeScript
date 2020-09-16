@@ -14,6 +14,11 @@ const getPatients = (): PatientNoSsn[] =>
     occupation,
   }));
 
+const getPatientById = (id: string): (Patient | null)[] => {
+  const patient = patients.filter((p) => p.id === id);
+  return patient;
+};
+
 const addPatient = (patient: NewPatient): PatientNoSsn => {
   const newPatient = {
     id: generateId(),
@@ -24,4 +29,4 @@ const addPatient = (patient: NewPatient): PatientNoSsn => {
   return newPatient;
 };
 
-export default { getPatients, addPatient };
+export default { getPatients, addPatient, getPatientById };
