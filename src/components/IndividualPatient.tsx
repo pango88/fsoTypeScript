@@ -6,9 +6,10 @@ import { Patient } from '../types';
 import { useStateValue, setPatient } from '../state';
 import { useParams } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react';
+import EntryDetails from './EntryDetails';
 
 const IndividualPatient: React.FC = () => {
-  const [{ patient, diagnosis }, dispatch] = useStateValue();
+  const [{ patient }, dispatch] = useStateValue();
 
   const { id } = useParams<{ id: string }>();
 
@@ -36,37 +37,6 @@ const IndividualPatient: React.FC = () => {
     }
   };
 
-  const entries = () => {
-    if (singlePatient.entries) {
-      return singlePatient.entries.map((entry) => {
-        return (
-          <div key={entry.id}>
-            {entry.date} {entry.description}
-          </div>
-        );
-      });
-    }
-  };
-
-  // Horrific piece of code, gonna look into this later. How to clean it up. Also search: map inside map, is there a cleaner and more efficent way?
-  const diagnosisCodes = () => {
-    if (singlePatient.entries) {
-      return (
-        <ul>
-          {singlePatient.entries.map((entry) => {
-            return entry.diagnosisCodes
-              ? entry.diagnosisCodes.map((code) => (
-                  <li key={code}>
-                    {code} {diagnosis[code].name}
-                  </li>
-                ))
-              : null;
-          })}
-        </ul>
-      );
-    }
-  };
-
   if (!singlePatient) {
     return (
       <div>
@@ -83,9 +53,7 @@ const IndividualPatient: React.FC = () => {
       </h2>
       <p>ssn: {singlePatient.ssn}</p>
       <p>occupation: {singlePatient.occupation}</p>
-      <h4>entries</h4>
-      {entries()}
-      {diagnosis ? diagnosisCodes() : null}
+      <EntryDetails entries={singlePatient.entries} />
     </div>
   );
 };

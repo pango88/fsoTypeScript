@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import { Button, Divider, Header, Container } from 'semantic-ui-react';
 
 import { apiBaseUrl } from './constants';
-import { useStateValue, setPatientList, setDiagnosisList } from './state';
-import { Diagnosis, Patient } from './types';
+import { useStateValue, setPatientList } from './state';
+import { Patient } from './types';
 
 import PatientListPage from './PatientListPage';
 
@@ -20,12 +20,15 @@ const App: React.FC = () => {
           `${apiBaseUrl}/patients`
         );
         dispatch(setPatientList(patientListFromApi));
-        /* This data refreshes everytime you reload the page, and for example if you reload the data on another route such as individual patient then the page crashes, tbh i cba to fix all this rn seeing as i think all the exercises are poorly formulated and slighlty confusing as in what direction to take and i just wanna be finished*/
+        /*
+        The state for diagnoses still exists and isnt commented out but its just extra code and does not get used since i do not call it at any point
+
         const { data: diagnoseListFromApi } = await axios.get<Diagnosis[]>(
           `${apiBaseUrl}/diagnoses`
         );
+
         dispatch(setDiagnosisList(diagnoseListFromApi));
-        /*********************************************/
+        */
       } catch (e) {
         console.error(e);
       }
