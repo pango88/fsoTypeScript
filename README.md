@@ -1,3 +1,4 @@
+# big part of this project was taken from fullstackopen for the current assignment and then i have been building on it
 # Patientor - frontend
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
