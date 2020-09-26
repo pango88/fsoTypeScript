@@ -27,4 +27,9 @@ router.post('/', (req, res) => {
   }
 });
 
+router.post('/:id/entries', (req, res) => {
+  try {
+  } catch (error) {}
+});
+
 export default router;
