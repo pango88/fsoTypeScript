@@ -8,9 +8,8 @@ import { Entry, assertNever } from '../types';
 const EntryDetails: React.FC<{ entries: Entry[] | undefined }> = ({
   entries,
 }) => {
-  console.log(entries);
   if (!entries || entries.length === 0) {
-    return <div>Patient has no entries yet </div>;
+    return <b>Patient has no entries yet </b>;
   }
   return (
     <div>
