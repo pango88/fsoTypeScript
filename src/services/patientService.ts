@@ -1,7 +1,7 @@
 import patientData from '../../data/patients';
 import { generateId } from '../utils';
 
-import { PatientNoSsn, Patient, NewPatient, Entry } from '../types';
+import { PatientNoSsn, Patient, NewPatient, NewEntry } from '../types';
 
 const patients: Array<Patient> = patientData;
 
@@ -31,13 +31,22 @@ const addPatient = (patient: NewPatient): PatientNoSsn => {
   return newPatient;
 };
 
-
-// high order function ... patient => patient.id === id ? updatedPatientWithNewEntry : patient
-// const patient = patients.filter((p) => p.id === id);
-/* const updatedPatientWithNewEntry = {
-  ...patient
-  entries: ...patient.entries, entry
-} */
-const addEntry = (id: string, entry: Entry) => {};
+/// temporary
+/************/
+// TAR EN PAUS HÄR, NUVARANDE PROBLEM: patients.splice, uppdaterar inte min data. Något problem med types, fattar ej. Utils.ts har problem med isType hospital, health och occupational parsing. Sen bör koden fungera, men den är völdigt verbose och inte jätte fin. Fan gillar in TS just nu
+/***********/
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+const addEntry = (id: string, entry: NewEntry) => {
+  const patient: Patient[] = patients.filter((p) => p.id === id);
+  const updatedPatient = {
+    ...patient[0],
+    entries: [...patient, { id: generateId(), ...entry }],
+  };
+  patients.map((p, i) =>
+    p.id === id ? patients.splice(i, 1, updatedPatient) : p
+  );
+  patients.splice(1, 1, updatedPatient);
+  return updatedPatient;
+};
 
 export default { getPatients, addPatient, getPatientById, addEntry };
