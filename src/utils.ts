@@ -54,19 +54,17 @@ export const toNewPatient = (object: any): NewPatient => ({
 export const isEntryType = (param: any): param is EntryType =>
   Object.values(EntryType).includes(param);
 
-/*const isHospital = (param: any): param is EntryType.Hospital =>
-  Object.values(EntryType.Hospital).includes(param);
-const parseHospital = (type: any): EntryType.Hospital => {
-  if (!type || !isHospital(type)) {
+const parseHospital = (type: EntryType.Hospital): EntryType.Hospital => {
+  if (!type || type !== 'Hospital') {
     throw new Error(`Incorrect or missing type: ${type}`);
   }
   return type;
-}; */
+};
 
-const isHealthCheck = (param: any): param is EntryType.HealthCheck =>
-  Object.values(EntryType.HealthCheck).includes(param);
-const parseHealthCheck = (type: any): EntryType.HealthCheck => {
-  if (!type || !isHealthCheck(type)) {
+const parseHealthCheck = (
+  type: EntryType.HealthCheck
+): EntryType.HealthCheck => {
+  if (!type || type !== 'HealthCheck') {
     throw new Error(`Incorrect or missing type: ${type}`);
   }
   return type;
@@ -76,18 +74,16 @@ const isHealthCheckRating = (param: any): param is HealthCheckRating =>
   Object.values(HealthCheckRating).includes(param);
 
 const parseHealthCheckRating = (rating: any): HealthCheckRating => {
-  if (!rating || !isHealthCheckRating(rating)) {
+  if (rating === undefined || !isHealthCheckRating(rating)) {
     throw new Error(`incorrect or missing rating: ${rating}`);
   }
   return rating;
 };
 
-const isOccupational = (
-  param: any
-): param is EntryType.OccupationalHealthcare =>
-  Object.values(EntryType.OccupationalHealthcare).includes(param);
-const parseOccupational = (type: any): EntryType.OccupationalHealthcare => {
-  if (!type || !isOccupational(type)) {
+const parseOccupational = (
+  type: EntryType.OccupationalHealthcare
+): EntryType.OccupationalHealthcare => {
+  if (!type || type !== 'OccupationalHealthcare') {
     throw new Error(`Incorrect or missing type: ${type}`);
   }
   return type;
@@ -97,12 +93,16 @@ export const toBaseEntry = (object: any): NewEntry => ({
   description: parseInformation(object.description),
   date: parseDate(object.date),
   specialist: parseInformation(object.specialist),
+  // Seeing as diagnosisCodes are optional i dont really know how to implement a nice way to parse it and the assignment didnt really mention it so i think this will do for now
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  diagnosisCodes: object.diagnosisCodes,
 });
 
 export const toHospitalEntry = (object: any): NewHospitalEntry => ({
   ...toBaseEntry(object),
-  type: object.type,
+  type: parseHospital(object.type),
   // this one might be weird
+  // incorrect or missing information: undefined
   discharge: {
     date: parseDate(object.discharge.date),
     criteria: parseInformation(object.discharge.criteria),
@@ -120,6 +120,7 @@ export const toOccupationalEntry = (object: any): NewOccupationalEntry => ({
   type: parseOccupational(object.type),
   employerName: parseInformation(object.employerName),
   // this one might be weird
+  // incorrect or missing information: undefined
   sickLeave: {
     startDate: parseDate(object.sickLeave.startDate),
     endDate: parseDate(object.sickLeave.endDate),
