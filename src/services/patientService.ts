@@ -42,7 +42,7 @@ const addEntry = (id: string, entry: NewEntry) => {
   patients.map((p, i) =>
     p.id === id ? patients.splice(i, 1, updatedPatient) : p
   );
-  return updatedPatient;
+  return [updatedPatient];
 };
 
 export default { getPatients, addPatient, getPatientById, addEntry };
