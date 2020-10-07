@@ -2,16 +2,40 @@ import React from 'react';
 import axios from 'axios';
 
 import { apiBaseUrl } from '../constants';
-import { Patient } from '../types';
+import { NewEntry, Patient } from '../types';
 import { useStateValue, setPatient } from '../state';
 import { useParams } from 'react-router-dom';
-import { Icon } from 'semantic-ui-react';
+import { Icon, Button } from 'semantic-ui-react';
 import EntryDetails from './EntryDetails';
+import AddEntryModal from '../AddEntryModal';
 
 const IndividualPatient: React.FC = () => {
   const [{ patient }, dispatch] = useStateValue();
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | undefined>();
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
 
   const { id } = useParams<{ id: string }>();
+
+  const submitNewEntry = async (values: NewEntry) => {
+    try {
+      const { data: newEntryPatient } = await axios.post<Patient[]>(
+        `${apiBaseUrl}/patients/${id}/entries`,
+        values
+      );
+      dispatch(setPatient(newEntryPatient));
+      closeModal();
+    } catch (e) {
+      console.error(e.response.data);
+      setError(e.response.data.error);
+    }
+  };
 
   const singlePatient = Object.values(patient).filter((p) => p.id === id)[0];
 
@@ -54,6 +78,13 @@ const IndividualPatient: React.FC = () => {
       <p>ssn: {singlePatient.ssn}</p>
       <p>occupation: {singlePatient.occupation}</p>
       <EntryDetails entries={singlePatient.entries} />
+      <AddEntryModal
+        modalOpen={modalOpen}
+        onSubmit={submitNewEntry}
+        error={error}
+        onClose={closeModal}
+      />
+      <Button onClick={() => openModal()}>Add New Entry</Button>
     </div>
   );
 };

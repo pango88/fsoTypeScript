@@ -4,6 +4,12 @@ export interface Diagnosis {
   latin?: string;
 }
 
+export enum EntryType {
+  HealthCheck = 'HealthCheck',
+  Hospital = 'Hospital',
+  OccupationalHealthcare = 'OccupationalHealthcare',
+}
+
 export enum Gender {
   Male = 'male',
   Female = 'female',
@@ -66,3 +72,6 @@ export const assertNever = (value: never): never => {
     `Unhandled discriminated union member: ${JSON.stringify(value)}`
   );
 };
+
+
+export type NewEntry = Omit<Entry, 'id'>;

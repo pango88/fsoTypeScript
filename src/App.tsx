@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import { Button, Divider, Header, Container } from 'semantic-ui-react';
 
 import { apiBaseUrl } from './constants';
-import { useStateValue, setPatientList } from './state';
-import { Patient } from './types';
+import { useStateValue, setPatientList, setDiagnosisList } from './state';
+import { Patient, Diagnosis } from './types';
 
 import PatientListPage from './PatientListPage';
 
@@ -20,15 +20,11 @@ const App: React.FC = () => {
           `${apiBaseUrl}/patients`
         );
         dispatch(setPatientList(patientListFromApi));
-        /*
-        The state for diagnoses still exists and isnt commented out but its just extra code and does not get used since i do not call it at any point
-
         const { data: diagnoseListFromApi } = await axios.get<Diagnosis[]>(
           `${apiBaseUrl}/diagnoses`
         );
 
         dispatch(setDiagnosisList(diagnoseListFromApi));
-        */
       } catch (e) {
         console.error(e);
       }
