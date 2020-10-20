@@ -15,7 +15,7 @@ type SelectFieldProps = {
   label: string;
   options: EntryTypeOption[];
   setType: (type: string) => void;
-  // dont know what type handleChange is, might need to fix that later
+  // dont know what type handleChange is, might need to fix that later but for now any will suffice
   handleChange: any;
 };
 

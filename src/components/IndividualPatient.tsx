@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { apiBaseUrl } from '../constants';
 import { NewEntry, Patient } from '../types';
-import { useStateValue, setPatient } from '../state';
+import { useStateValue, setPatient, addPatientEntry } from '../state';
 import { useParams } from 'react-router-dom';
 import { Icon, Button } from 'semantic-ui-react';
 import EntryDetails from './EntryDetails';
@@ -23,13 +23,15 @@ const IndividualPatient: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
 
+  const singlePatient = Object.values(patient).filter((p) => p.id === id)[0];
+
   const submitNewEntry = async (values: NewEntry) => {
     try {
       const { data: newEntryPatient } = await axios.post<Patient[]>(
         `${apiBaseUrl}/patients/${id}/entries`,
         values
       );
-      dispatch(setPatient(newEntryPatient));
+      dispatch(addPatientEntry(newEntryPatient[0]));
       closeModal();
     } catch (e) {
       console.error(e.response.data);
@@ -37,21 +39,19 @@ const IndividualPatient: React.FC = () => {
     }
   };
 
-  const singlePatient = Object.values(patient).filter((p) => p.id === id)[0];
-
-  const fetchPatient = async () => {
-    try {
-      const { data: patientFromId } = await axios.get<Patient[]>(
-        `${apiBaseUrl}/patients/${id}`
-      );
-      dispatch(setPatient(patientFromId));
-    } catch (e) {
-      console.error(e);
-    }
-  };
-  if (!singlePatient) {
+  React.useEffect(() => {
+    const fetchPatient = async () => {
+      try {
+        const { data: patientFromId } = await axios.get<Patient[]>(
+          `${apiBaseUrl}/patients/${id}`
+        );
+        dispatch(setPatient(patientFromId));
+      } catch (e) {
+        console.error(e);
+      }
+    };
     fetchPatient();
-  }
+  }, [dispatch]);
 
   const genderIcon = () => {
     if (singlePatient.gender === 'male') {

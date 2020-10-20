@@ -24,7 +24,6 @@ const entryTypeOptions: EntryTypeOption[] = [
 export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   const [{ diagnosis }] = useStateValue();
   const [type, setType] = useState('HealthCheck');
-  console.log(type);
 
   const typeFormFields = () => {
     if (type === 'HealthCheck') {
@@ -92,6 +91,7 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         diagnosisCodes: [''],
       }}
       onSubmit={onSubmit}
+      // Im not validating the extra properties of each entry since they dont exist on initial values, I won't fix this for now...
       validate={(values) => {
         const requiredError = 'Field is required';
         const errors: { [field: string]: string } = {};
@@ -107,9 +107,10 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         if (!values.specialist) {
           errors.specialist = requiredError;
         }
+        return errors;
       }}
     >
-      {({ isValid, setFieldValue, setFieldTouched, handleChange }) => {
+      {({ isValid, setFieldValue, setFieldTouched, handleChange, dirty }) => {
         return (
           <Form className="form ui">
             <SelectField
@@ -154,7 +155,7 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
                   type="submit"
                   floated="right"
                   color="green"
-                  disabled={!isValid}
+                  disabled={!dirty || !isValid}
                 >
                   Add
                 </Button>
